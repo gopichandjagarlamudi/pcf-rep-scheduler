@@ -1,0 +1,5 @@
+{
+  "name": "PCF Rep Scheduler latest",
+  "description": "Automated schedule generator for field reps. Handles availability, distance constraints, and rotation rules to create fair weekly schedules.",
+  "requestFramePermissions": []
+}
