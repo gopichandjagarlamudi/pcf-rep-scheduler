@@ -10,6 +10,7 @@ An automated schedule generation system for field representatives that creates o
 
 - **Smart Scheduling**: Intelligent shift assignment with constraint satisfaction
 - **Real Authentication**: Secure login with Supabase (admin-controlled user access)
+- **Persistent Schedules**: Auto-save and auto-load schedules per user
 - **Analytics Dashboard**: Real-time statistics and compliance tracking
 - **Excel/CSV Import**: Easy data upload for reps, locations, and availability
 - **Location Optimization**: Distance-based assignment with rotation rules
@@ -32,14 +33,19 @@ An automated schedule generation system for field representatives that creates o
    - See [SETUP.md](SETUP.md) for detailed Supabase setup instructions
    - Copy `.env.example` to `.env.local` and add your Supabase credentials
 
-3. **Run the app:**
+3. **Set up database:**
+   - See [DATABASE_SETUP.md](DATABASE_SETUP.md) to enable schedule persistence
+   - Run the SQL script in your Supabase project (takes 2 minutes)
+
+4. **Run the app:**
    ```bash
    npm run dev
    ```
 
-4. **Access the app:**
+5. **Access the app:**
    - Open `http://localhost:3000`
    - Login with credentials created in Supabase
+   - Your schedules will auto-save and persist across sessions!
 
 ## Authentication Setup
 

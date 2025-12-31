@@ -9,6 +9,7 @@ import { FileData, FileType, ScheduleEntry, ScheduleStats } from './types';
 import { Calendar, LayoutDashboard, Database, AlertCircle, Loader2, Sparkles, LogOut } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from './lib/supabase';
+import { saveSchedule, loadSchedule } from './lib/scheduleDb';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -47,6 +48,19 @@ const App: React.FC = () => {
         if (session?.user) {
           setIsAuthenticated(true);
           setUser(session.user.email || 'User');
+
+          // Load saved schedule for this user
+          const result = await loadSchedule();
+          if (result.success && result.schedule && result.stats) {
+            setSchedule(result.schedule);
+            setStats(result.stats);
+            if (result.dateRange) {
+              setDateRange({
+                start: result.dateRange.start,
+                end: result.dateRange.end,
+              });
+            }
+          }
         }
       } catch (error) {
         console.error('Session check error:', error);
@@ -58,13 +72,29 @@ const App: React.FC = () => {
     checkSession();
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         setIsAuthenticated(true);
         setUser(session.user.email || 'User');
+
+        // Load saved schedule for this user
+        const result = await loadSchedule();
+        if (result.success && result.schedule && result.stats) {
+          setSchedule(result.schedule);
+          setStats(result.stats);
+          if (result.dateRange) {
+            setDateRange({
+              start: result.dateRange.start,
+              end: result.dateRange.end,
+            });
+          }
+        }
       } else {
         setIsAuthenticated(false);
         setUser(null);
+        // Clear schedule data on logout
+        setSchedule([]);
+        setStats(null);
       }
     });
 
@@ -119,13 +149,13 @@ const App: React.FC = () => {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!files.rep || !files.location || !files.availability) {
       setError("Please complete all required data uploads.");
       return;
     }
     setIsProcessing(true);
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
         const sParts = dateRange.start.split('-').map(Number);
         const eParts = dateRange.end.split('-').map(Number);
@@ -143,6 +173,19 @@ const App: React.FC = () => {
         setSchedule(result.schedule);
         setStats(result.stats);
         setError(null);
+
+        // Save schedule to database
+        const saveResult = await saveSchedule(
+          result.schedule,
+          result.stats,
+          dateRange.start,
+          dateRange.end
+        );
+
+        if (!saveResult.success) {
+          console.error('Failed to save schedule:', saveResult.error);
+          // Don't show error to user - schedule is still displayed
+        }
       } catch (err) {
         setError("Error generating schedule. Verify your data integrity.");
       } finally {
