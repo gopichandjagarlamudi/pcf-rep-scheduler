@@ -1,0 +1,5 @@
+id,rep_id,date,reason
+T001,R001,2026-03-10,Sick leave
+T002,R002,2026-03-16,Personal day
+T003,R003,2026-03-11,Doctor appointment
+T004,R004,2026-03-17,Family emergency

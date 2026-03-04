@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local Netlify folder
+.netlify
+.codex-netlify-home
+
+# Automated test outputs
+tests/artifacts/
+tests/generated-fixtures/
+playwright-report/
+test-results/

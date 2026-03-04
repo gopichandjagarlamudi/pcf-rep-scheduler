@@ -70,6 +70,38 @@ vercel
 
 See [SETUP.md](SETUP.md) for detailed deployment instructions.
 
+## Automated Testing
+
+This project includes deterministic dummy-data test automation for scheduler logic and upload smoke paths.
+
+### Generate fixture datasets
+```bash
+npm run test:fixtures
+```
+
+### Run logic coverage (mapping + scheduler assertions)
+```bash
+npm run test:logic
+```
+
+### Run browser smoke tests (requires auth env vars)
+```bash
+E2E_SUPABASE_EMAIL=your_test_user@example.com \
+E2E_SUPABASE_PASSWORD=your_password \
+E2E_BASE_URL=http://127.0.0.1:4173 \
+npm run test:e2e
+```
+
+### Run full automation suite + report
+```bash
+npm run test:all
+```
+
+Artifacts are written to:
+- `tests/artifacts/raw/`
+- `tests/artifacts/latest/summary.md`
+- `tests/artifacts/latest/results.json`
+
 ## Tech Stack
 
 - **Frontend**: React 19 + TypeScript + Vite

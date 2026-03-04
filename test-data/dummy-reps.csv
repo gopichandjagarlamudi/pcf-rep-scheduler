@@ -1,0 +1,6 @@
+id,name,home_address,home_lat,home_lng,status,employment_type
+R001,Alex Carter,"Downtown LA",34.0522,-118.2437,active,full-time
+R002,Briana Lee,"Hollywood",34.0928,-118.3287,active,full-time
+R003,Carlos Mendez,"Koreatown",34.0628,-118.3089,active,part-time
+R004,Deepa Nair,"Silver Lake",34.0866,-118.2700,active,part-time
+R005,Evan Brooks,"Pasadena",34.1478,-118.1445,inactive,full-time

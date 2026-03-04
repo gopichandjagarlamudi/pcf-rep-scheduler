@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:fixtures": "tsx tests/tools/generate-fixtures.ts",
+    "test:logic": "vitest run tests/logic --reporter=json --outputFile=tests/artifacts/raw/vitest.json",
+    "test:e2e": "playwright test",
+    "test:report": "tsx tests/tools/report-results.ts",
+    "test:all": "npm run test:fixtures && npm run test:logic && npm run test:e2e && npm run test:report",
+    "test:ci": "npm run test:fixtures && npm run test:logic && npm run test:e2e && npm run test:report"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
@@ -18,9 +24,13 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.58.2",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vitest": "^4.0.18"
   }
 }
