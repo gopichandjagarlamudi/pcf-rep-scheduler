@@ -14,7 +14,7 @@ test.describe('Upload and generate smoke', () => {
     await expect(page.getByText('Assignments scheduled')).toBeVisible();
 
     const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('button', { name: 'CSV', exact: true }).click();
+    await page.getByRole('button', { name: 'CSV' }).click();
     const download = await downloadPromise;
     expect(download.suggestedFilename().toLowerCase()).toContain('schedule');
   });
