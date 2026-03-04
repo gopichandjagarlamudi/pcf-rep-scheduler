@@ -10,8 +10,8 @@ test.describe('Edge-case smoke', () => {
     await loginAsTestUser(page);
     await uploadFilesForCase(page, 'missing-availability-file', false, false);
 
-    await page.getByRole('button', { name: 'Generate Weekly Plan' }).click();
-    await expect(page.getByText('Please complete all required data uploads.')).toBeVisible();
+    const generateButton = page.getByRole('button', { name: 'Generate Weekly Plan' });
+    await expect(generateButton).toBeDisabled();
   });
 
   test('[case:inactive-rep-not-scheduled] inactive rep is not shown in schedule table', async ({ page }) => {

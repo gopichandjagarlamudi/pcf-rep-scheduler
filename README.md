@@ -107,7 +107,6 @@ Artifacts are written to:
 - **Frontend**: React 19 + TypeScript + Vite
 - **Styling**: Tailwind CSS
 - **Authentication**: Supabase
-- **Charts**: Recharts
 - **Data Processing**: XLSX, date-fns
 
 ## User Management
