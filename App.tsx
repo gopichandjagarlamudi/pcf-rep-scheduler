@@ -8,7 +8,7 @@ import { Login } from './components/Login';
 import { FileData, FileType, ScheduleEntry, ScheduleStats } from './types';
 import { Calendar, LayoutDashboard, Database, AlertCircle, Loader2, Sparkles, LogOut } from 'lucide-react';
 import { format } from 'date-fns';
-import { supabase } from './lib/supabase';
+import { supabase, supabaseConfigError } from './lib/supabase';
 import { saveSchedule, loadSchedule } from './lib/scheduleDb';
 
 const App: React.FC = () => {
@@ -55,46 +55,76 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          setIsAuthenticated(true);
-          setUser(session.user.email || 'User');
-          await loadSavedSchedule();
-        }
-      } catch (error) {
-        console.error('Session check error:', error);
-      } finally {
-        setIsCheckingSession(false);
-      }
-    };
-
-    checkSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        setIsAuthenticated(true);
-        setUser(session.user.email || 'User');
-        await loadSavedSchedule();
-      } else {
-        setIsAuthenticated(false);
-        setUser(null);
-        setSchedule([]);
-        setStats(null);
-      }
-    });
-
     const { start, end } = getDefaultDateRange();
     setDateRange({
       start: format(start, 'yyyy-MM-dd'),
       end: format(end, 'yyyy-MM-dd')
     });
+  }, []);
+
+  useEffect(() => {
+    if (!supabase) {
+      setIsCheckingSession(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setIsAuthenticated(Boolean(session?.user));
+        setUser(session?.user?.email || null);
+      } catch (error) {
+        console.error('Session check error:', error);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setIsAuthenticated(false);
+        setUser(null);
+      } finally {
+        if (isMounted) {
+          setIsCheckingSession(false);
+        }
+      }
+    };
+
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setIsAuthenticated(Boolean(session?.user));
+      setUser(session?.user?.email || null);
+
+      if (!session?.user) {
+        setSchedule([]);
+        setStats(null);
+      }
+    });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    loadSavedSchedule();
+  }, [isAuthenticated]);
 
   const handleLogin = (email: string) => {
     setIsAuthenticated(true);
@@ -102,6 +132,10 @@ const App: React.FC = () => {
   };
 
   const handleLogout = async () => {
+    if (!supabase) {
+      return;
+    }
+
     await supabase.auth.signOut();
     setIsAuthenticated(false);
     setUser(null);
@@ -176,6 +210,29 @@ const App: React.FC = () => {
       setIsProcessing(false);
     }
   };
+
+  if (supabaseConfigError) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white border border-amber-200 rounded-2xl shadow-xl shadow-slate-200/50 p-8">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-slate-900">Configuration Required</h1>
+              <p className="mt-2 text-sm text-slate-600">
+                {supabaseConfigError}
+              </p>
+              <p className="mt-3 text-xs font-medium text-slate-500">
+                For Netlify deployments, add these values in Site configuration &gt; Environment variables and redeploy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isCheckingSession) {
     return (

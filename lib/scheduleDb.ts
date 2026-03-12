@@ -22,6 +22,10 @@ export async function saveSchedule(
   dateRangeStart: string,
   dateRangeEnd: string
 ): Promise<{ success: boolean; error?: string }> {
+  if (!supabase) {
+    return { success: false, error: 'Supabase client is not configured' };
+  }
+
   try {
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -87,6 +91,10 @@ export async function loadSchedule(): Promise<{
   dateRange?: { start: string; end: string };
   error?: string;
 }> {
+  if (!supabase) {
+    return { success: false, error: 'Supabase client is not configured' };
+  }
+
   try {
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -134,6 +142,10 @@ export async function loadSchedule(): Promise<{
  * Delete the user's schedule
  */
 export async function deleteSchedule(): Promise<{ success: boolean; error?: string }> {
+  if (!supabase) {
+    return { success: false, error: 'Supabase client is not configured' };
+  }
+
   try {
     const { data: { user } } = await supabase.auth.getUser();
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, Lock, User, Loader2, AlertCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseConfigError } from '../lib/supabase';
 
 interface LoginProps {
   onLogin: (email: string) => void;
@@ -19,6 +19,12 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
       setError(null);
 
       try {
+        if (!supabase) {
+          setError(supabaseConfigError || 'Supabase is not configured.');
+          setIsLoading(false);
+          return;
+        }
+
         const { data, error: authError } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim(),
