@@ -1,5 +1,4 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { ScheduleStats } from '../types';
 import { Clock, CheckCircle2, AlertTriangle, Users } from 'lucide-react';
 
@@ -8,12 +7,11 @@ interface StatsPanelProps {
 }
 
 export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
-  const chartData = stats.repStats
+  const repsByHours = [...stats.repStats]
     .sort((a, b) => b.totalHours - a.totalHours)
-    .slice(0, 10)
-    .map(s => ({
-      name: s.rep_name.split(' ')[0],
-      hours: s.totalHours
+    .map((repStat) => ({
+      ...repStat,
+      isBelowMin: stats.hourGaps.some((gap) => gap.rep_name === repStat.rep_name),
     }));
 
   return (
@@ -55,7 +53,7 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Workload Distribution</h3>
-            <p className="text-xs text-slate-400 font-medium mt-1">Hours generated per representative (Top 10)</p>
+            <p className="text-xs text-slate-400 font-medium mt-1">Hours generated per representative</p>
           </div>
           <div className="flex gap-4">
              <div className="flex items-center gap-2">
@@ -68,31 +66,48 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
              </div>
           </div>
         </div>
-        <div className="h-56">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-              <XAxis 
-                dataKey="name" 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 11, fontWeight: 600, fill: '#64748B' }} 
-              />
-              <YAxis 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 11, fontWeight: 600, fill: '#CBD5E1' }}
-              />
-              <Tooltip 
-                cursor={{ fill: '#F8FAFC', radius: 4 }}
-                contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', padding: '12px' }}
-              />
-              <Bar dataKey="hours" radius={[4, 4, 4, 4]} barSize={32}>
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.hours >= 24 ? '#4F46E5' : '#E2E8F0'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="border border-slate-100 rounded-xl overflow-hidden">
+          <div className="hidden sm:grid grid-cols-[minmax(0,1.8fr)_auto_auto_auto] gap-4 px-4 py-3 bg-slate-50 border-b border-slate-100">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Representative</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Hours</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Shifts</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Status</span>
+          </div>
+          <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+            {repsByHours.map((rep) => (
+              <div
+                key={rep.rep_id}
+                className="px-4 py-3 flex flex-col sm:grid sm:grid-cols-[minmax(0,1.8fr)_auto_auto_auto] gap-2 sm:gap-4 sm:items-center hover:bg-slate-50 transition-colors"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-slate-900 truncate">{rep.rep_name}</p>
+                  <p className="text-xs text-slate-400 font-medium sm:hidden">
+                    {rep.totalHours}h across {rep.shiftCount} shifts
+                  </p>
+                </div>
+                <div className="hidden sm:block text-right">
+                  <span className="text-sm font-bold text-slate-900">{rep.totalHours}h</span>
+                </div>
+                <div className="hidden sm:block text-right">
+                  <span className="text-xs font-bold text-slate-500">{rep.shiftCount}</span>
+                </div>
+                <div className="flex justify-between items-center sm:justify-end">
+                  <div className="sm:hidden flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</span>
+                  </div>
+                  <span
+                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                      rep.isBelowMin
+                        ? 'bg-slate-100 text-slate-500'
+                        : 'bg-indigo-50 text-indigo-600'
+                    }`}
+                  >
+                    {rep.isBelowMin ? 'Below Min' : 'Standard'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

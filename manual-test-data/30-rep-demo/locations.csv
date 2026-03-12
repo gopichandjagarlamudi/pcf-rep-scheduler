@@ -1,0 +1,16 @@
+id,name,address,lat,lng
+L001,DTLA Store,"500 W 7th St, Los Angeles, CA",34.047,-118.257
+L002,Sunset Store,"900 Sunset Blvd, Los Angeles, CA",34.0983,-118.3295
+L003,Pasadena Store,"300 E Colorado Blvd, Pasadena, CA",34.145,-118.144
+L004,Glendale Store,"201 N Brand Blvd, Glendale, CA",34.1486,-118.2551
+L005,Burbank Store,"201 E Magnolia Blvd, Burbank, CA",34.1817,-118.3075
+L006,Studio City Store,"12050 Ventura Blvd, Studio City, CA",34.1428,-118.3989
+L007,West Hollywood Store,"8801 Santa Monica Blvd, West Hollywood, CA",34.0907,-118.3864
+L008,Culver City Store,"9300 Culver Blvd, Culver City, CA",34.0239,-118.395
+L009,Santa Monica Store,"1332 3rd Street Promenade, Santa Monica, CA",34.0168,-118.4963
+L010,Inglewood Store,"321 S Market St, Inglewood, CA",33.9611,-118.3532
+L011,El Segundo Store,"2041 Park Pl, El Segundo, CA",33.918,-118.4168
+L012,Long Beach Store,"245 Pine Ave, Long Beach, CA",33.7691,-118.1921
+L013,Torrance Store,"21540 Hawthorne Blvd, Torrance, CA",33.8336,-118.3497
+L014,Redondo Beach Store,"1815 Hawthorne Blvd, Redondo Beach, CA",33.8672,-118.352
+L015,San Pedro Store,"550 S Pacific Ave, San Pedro, CA",33.7391,-118.2923

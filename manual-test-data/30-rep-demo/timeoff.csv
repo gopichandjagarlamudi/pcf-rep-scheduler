@@ -1,0 +1,11 @@
+id,rep_id,date,reason
+T001,R003,2026-03-17,Medical appointment
+T002,R006,2026-03-24,Family event
+T003,R010,2026-03-19,Training day
+T004,R014,2026-03-23,Vacation day
+T005,R018,2026-03-26,Personal leave
+T006,R021,2026-03-18,Exam schedule
+T007,R022,2026-03-25,Doctor visit
+T008,R024,2026-03-16,Time off request
+T009,R029,2026-03-22,Family commitment
+T010,R030,2026-03-24,Class schedule

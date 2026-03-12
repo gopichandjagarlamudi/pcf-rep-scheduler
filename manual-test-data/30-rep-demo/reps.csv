@@ -1,0 +1,31 @@
+id,name,home_address,home_lat,home_lng,status,employment_type
+R001,Ava Brooks,Downtown Los Angeles,34.0469,-118.2509,active,full-time
+R002,Noah Patel,Koreatown,34.0617,-118.3004,active,full-time
+R003,Mia Carter,Hollywood,34.1015,-118.3269,active,full-time
+R004,Liam Chen,Silver Lake,34.0869,-118.2702,active,full-time
+R005,Emma Garcia,Echo Park,34.0782,-118.2606,active,full-time
+R006,Ethan Kim,Pasadena,34.1478,-118.1445,active,full-time
+R007,Sophia Nguyen,Glendale,34.1425,-118.2551,active,full-time
+R008,Mason Rivera,Burbank,34.1808,-118.309,active,full-time
+R009,Isabella Torres,North Hollywood,34.1722,-118.3781,active,full-time
+R010,Logan Murphy,Studio City,34.1391,-118.391,active,full-time
+R011,Charlotte Reed,West Hollywood,34.09,-118.3617,active,full-time
+R012,Lucas Flores,Mid City,34.0526,-118.3443,active,full-time
+R013,Amelia Scott,Culver City,34.0211,-118.3965,active,full-time
+R014,James Foster,Santa Monica,34.0195,-118.4912,active,full-time
+R015,Harper Ward,Inglewood,33.9617,-118.3531,active,full-time
+R016,Benjamin Diaz,El Segundo,33.9192,-118.4165,active,full-time
+R017,Evelyn Price,Long Beach,33.7701,-118.1937,active,full-time
+R018,Henry Cooper,Torrance,33.8358,-118.3406,active,full-time
+R019,Abigail Perry,Redondo Beach,33.8492,-118.3884,active,full-time
+R020,Sebastian Long,San Pedro,33.7361,-118.2922,active,full-time
+R021,Ella Bennett,Downtown Los Angeles,34.0437,-118.2519,active,part-time
+R022,Jack Hughes,Koreatown,34.064,-118.307,active,part-time
+R023,Scarlett Ross,Hollywood,34.0988,-118.3291,active,part-time
+R024,Owen Sanders,Pasadena,34.1494,-118.139,active,part-time
+R025,Grace Powell,Glendale,34.15,-118.2478,active,part-time
+R026,Leo Simmons,Burbank,34.177,-118.315,active,part-time
+R027,Chloe Jenkins,West Hollywood,34.0887,-118.3722,inactive,full-time
+R028,Daniel Hayes,Santa Monica,34.0138,-118.4952,inactive,full-time
+R029,Lily Bryant,Inglewood,33.9591,-118.3477,active,part-time
+R030,Wyatt Coleman,Culver City,34.025,-118.3959,active,part-time
