@@ -213,18 +213,18 @@ const App: React.FC = () => {
 
   if (supabaseConfigError) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white border border-amber-200 rounded-2xl shadow-xl shadow-slate-200/50 p-8">
+      <div className="app-shell min-h-screen flex items-center justify-center px-4">
+        <div className="login-shell max-w-md w-full panel-surface rounded-[var(--radius-panel)] p-8">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-2xl bg-amber-50/90 text-amber-600 flex items-center justify-center shadow-soft">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-slate-900">Configuration Required</h1>
-              <p className="mt-2 text-sm text-slate-600">
+              <h1 className="text-lg font-extrabold text-slate-950">Configuration Required</h1>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
                 {supabaseConfigError}
               </p>
-              <p className="mt-3 text-xs font-medium text-slate-500">
+              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                 For Netlify deployments, add these values in Site configuration &gt; Environment variables and redeploy.
               </p>
             </div>
@@ -236,10 +236,13 @@ const App: React.FC = () => {
 
   if (isCheckingSession) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto mb-4" />
-          <p className="text-sm text-slate-500 font-medium">Loading...</p>
+      <div className="app-shell min-h-screen flex items-center justify-center px-4">
+        <div className="login-shell panel-surface rounded-[var(--radius-panel)] px-10 py-9 text-center">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--accent-soft)] shadow-glow">
+            <Loader2 className="h-7 w-7 animate-spin text-indigo-600" />
+          </div>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.24em] text-slate-400">Initializing Workspace</p>
+          <p className="mt-2 text-sm font-medium text-slate-500">Loading your planning environment...</p>
         </div>
       </div>
     );
@@ -252,44 +255,44 @@ const App: React.FC = () => {
   const canGenerate = files.rep && files.location && files.availability;
 
   return (
-    <div className="min-h-screen">
+    <div className="app-shell min-h-screen">
       {/* Top Header */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <nav className="glass-nav sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-600 shadow-glow">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-slate-900 tracking-tight leading-none">PCF Rep Scheduler</h1>
-              <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">Operations Dashboard</p>
+              <h1 className="text-sm font-extrabold text-slate-950 tracking-tight leading-none">PCF Rep Scheduler</h1>
+              <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">Operations Dashboard</p>
             </div>
           </div>
           <div className="flex items-center gap-6">
              <div className="hidden md:flex gap-4">
-                <span className="text-xs font-semibold text-indigo-600 flex items-center gap-1.5 px-3 py-1 bg-indigo-50 rounded-full">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-[var(--accent-soft)] px-3 py-1.5 text-xs font-semibold text-indigo-700 shadow-soft">
                   <LayoutDashboard className="w-3.5 h-3.5" />
                   Planner
                 </span>
-                <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5 px-3 py-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-slate-400">
                   <Database className="w-3.5 h-3.5" />
                   Fleet Management
                 </span>
              </div>
-             <div className="h-4 w-px bg-slate-200 hidden md:block" />
+             <div className="hidden h-4 w-px bg-slate-200/70 md:block" />
              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 rounded-full border border-slate-200/70 bg-white/65 px-2 py-1 shadow-soft backdrop-blur">
                   <div className="text-right hidden sm:block">
-                    <p className="text-[10px] font-black text-slate-400 uppercase leading-none">Logged in as</p>
-                    <p className="text-xs font-bold text-slate-700 leading-tight">{user}</p>
+                    <p className="text-[10px] font-extrabold uppercase leading-none tracking-[0.18em] text-slate-400">Logged in as</p>
+                    <p className="text-xs font-bold leading-tight text-slate-700">{user}</p>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-bold">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full border border-indigo-100 bg-gradient-to-br from-white to-indigo-50 text-xs font-bold text-indigo-700">
                     {user?.charAt(0).toUpperCase()}
                   </div>
                 </div>
                 <button 
                   onClick={handleLogout}
-                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                  className="secondary-button rounded-2xl p-2.5 text-slate-500 transition-all hover:bg-red-50 hover:text-red-500"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -299,20 +302,20 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="dashboard-shell max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Controls Panel */}
           <div className="lg:col-span-4 space-y-6">
-            <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Database className="w-4 h-4 text-slate-400" />
+            <section className="panel-surface overflow-hidden rounded-[var(--radius-panel)]">
+              <div className="panel-soft subtle-divider flex items-center justify-between border-b px-5 py-4">
+                <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                  <Database className="w-4 h-4 text-slate-500" />
                   Data Pipeline
                 </h2>
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Input Required</span>
+                <span className="rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-400 shadow-soft">Input Required</span>
               </div>
-              <div className="p-2 space-y-1">
+              <div className="p-3 space-y-2">
                 <Dropzone label="Representatives" type="rep" file={files.rep} onFileSelect={handleFileSelect} required />
                 <Dropzone label="Store Locations" type="location" file={files.location} onFileSelect={handleFileSelect} required />
                 <Dropzone label="Staff Availability" type="availability" file={files.availability} onFileSelect={handleFileSelect} required />
@@ -320,31 +323,31 @@ const App: React.FC = () => {
               </div>
             </section>
 
-            <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="p-5 border-b border-slate-100 bg-slate-50/50">
-                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-slate-400" />
+            <section className="panel-surface overflow-hidden rounded-[var(--radius-panel)]">
+              <div className="panel-soft subtle-divider border-b px-5 py-4">
+                <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                  <Calendar className="w-4 h-4 text-slate-500" />
                   Scheduling Window
                 </h2>
               </div>
               <div className="p-5 space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Period Start</label>
+                    <label className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-500">Period Start</label>
                     <input 
                       type="date" 
                       value={dateRange.start}
                       onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="field-shell w-full rounded-2xl px-3.5 py-3 text-sm font-medium text-slate-700 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Period End</label>
+                    <label className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-500">Period End</label>
                     <input 
                       type="date" 
                       value={dateRange.end}
                       onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="field-shell w-full rounded-2xl px-3.5 py-3 text-sm font-medium text-slate-700 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -353,10 +356,10 @@ const App: React.FC = () => {
                   onClick={handleGenerate}
                   disabled={!canGenerate || isProcessing}
                   className={`
-                    w-full py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2.5
+                    flex w-full items-center justify-center gap-2.5 rounded-2xl py-3.5 text-sm font-bold transition-all
                     ${canGenerate && !isProcessing
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm active:translate-y-px' 
-                      : 'bg-slate-100 text-slate-400 cursor-not-allowed'}
+                      ? 'primary-button text-white active:translate-y-px' 
+                      : 'cursor-not-allowed bg-slate-100 text-slate-400 shadow-none'}
                   `}
                 >
                   {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Calendar className="w-4 h-4" />}
@@ -364,7 +367,7 @@ const App: React.FC = () => {
                 </button>
                 
                 {error && (
-                  <div className="px-4 py-3 bg-red-50 text-red-600 border border-red-100 rounded-lg flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-2xl border border-red-100 bg-red-50/90 px-4 py-3 text-red-600">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
                     <p className="text-xs font-semibold">{error}</p>
                   </div>
@@ -381,12 +384,13 @@ const App: React.FC = () => {
                 <ScheduleTable schedule={schedule} />
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-slate-100 card-shadow text-center">
-                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                  <LayoutDashboard className="w-8 h-8 text-slate-200" />
+              <div className="panel-surface muted-grid flex h-full flex-col items-center justify-center rounded-[var(--radius-panel)] border border-slate-100/80 p-12 text-center">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-soft">
+                  <LayoutDashboard className="w-8 h-8 text-slate-300" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2">No Active Schedule</h3>
-                <p className="text-slate-500 text-sm max-w-sm">
+                <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.24em] text-slate-400">Planner Idle</p>
+                <h3 className="mb-2 text-xl font-extrabold tracking-tight text-slate-900">No Active Schedule</h3>
+                <p className="max-w-sm text-sm leading-6 text-slate-500">
                   Upload the required representative and location data to generate an optimized weekly work plan.
                 </p>
               </div>
@@ -397,7 +401,7 @@ const App: React.FC = () => {
       </main>
       
       <footer className="max-w-7xl mx-auto px-4 py-12 text-center text-slate-400">
-        <p className="text-xs font-medium">PCF Internal Operations System &bull; v1.2.0</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">PCF Internal Operations System &bull; v1.2.0</p>
       </footer>
     </div>
   );

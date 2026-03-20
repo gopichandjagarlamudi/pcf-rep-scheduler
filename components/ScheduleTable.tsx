@@ -32,25 +32,25 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schedule }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-1">
+      <div className="flex flex-col items-start justify-between gap-4 px-1 sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Work Schedule</h2>
-          <p className="text-xs text-slate-400 font-medium mt-1">Generated assignments and logistics</p>
+          <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-slate-900">Work Schedule</h2>
+          <p className="mt-1 text-xs font-medium text-slate-400">Generated assignments and logistics</p>
         </div>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="relative flex-1 sm:w-64 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center px-3">
+        <div className="flex w-full items-center gap-3 sm:w-auto">
+          <div className="field-shell relative flex flex-1 items-center rounded-2xl px-3 shadow-soft sm:w-72">
             <Search className="w-4 h-4 text-slate-300" />
             <input 
               type="text" 
               placeholder="Search reps or stores..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-none outline-none text-sm h-10 w-full ml-2 placeholder:text-slate-300 font-medium"
+              className="ml-2 h-11 w-full border-none bg-transparent text-sm font-medium text-slate-700 outline-none placeholder:text-slate-300"
             />
           </div>
           <button 
             onClick={() => exportScheduleToCSV(schedule)}
-            className="h-10 px-4 bg-white border border-slate-200 rounded-lg text-slate-600 font-bold text-xs flex items-center gap-2 hover:bg-slate-50 transition-colors shadow-sm"
+            className="secondary-button flex h-11 items-center gap-2 rounded-2xl px-4 text-xs font-bold text-slate-600 transition-colors hover:bg-white"
           >
             <Download className="w-3.5 h-3.5" />
             CSV
@@ -60,32 +60,32 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schedule }) => {
 
       <div className="space-y-10">
         {grouped.map(([date, entries]) => (
-          <div key={date} className="animate-in fade-in slide-in-from-top-4 duration-300">
+          <div key={date} className="animate-in">
             <div className="flex items-center gap-4 mb-4 px-1">
-               <div className="h-px bg-slate-200 flex-1" />
-               <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap">
+               <div className="h-px flex-1 bg-slate-200/80" />
+               <p className="whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-400">
                   {format(new Date(date.replace(/-/g, '/')), 'EEEE, MMMM do')}
                </p>
-               <div className="h-px bg-slate-200 flex-1" />
+               <div className="h-px flex-1 bg-slate-200/80" />
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="panel-surface overflow-hidden rounded-[var(--radius-panel)]">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-100">
+                  <thead className="panel-soft subtle-divider border-b">
                     <tr>
-                      <th className="px-6 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Team Member</th>
-                      <th className="px-6 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Deployment</th>
-                      <th className="px-6 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Shift Window</th>
-                      <th className="px-6 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Metrics</th>
+                      <th className="px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Team Member</th>
+                      <th className="px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Deployment</th>
+                      <th className="px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Shift Window</th>
+                      <th className="px-6 py-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">Metrics</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100/90">
                     {entries.map((entry) => (
-                      <tr key={entry.id} className="hover:bg-slate-50/50 transition-colors">
+                      <tr key={entry.id} className="transition-colors hover:bg-slate-50/70">
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 shadow-soft">
                               <User className="w-4 h-4 text-slate-400" />
                             </div>
                             <p className="text-sm font-bold text-slate-800">{entry.rep_name}</p>
@@ -99,16 +99,16 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schedule }) => {
                         </td>
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded text-slate-700">
+                            <div className="flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-slate-700">
                               <Clock className="w-3.5 h-3.5" />
                               <span className="text-[11px] font-bold">{entry.start_time} - {entry.end_time}</span>
                             </div>
-                            <span className="text-[10px] font-black text-slate-300 uppercase">{entry.shift_type}</span>
+                            <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-300">{entry.shift_type}</span>
                           </div>
                         </td>
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-2">
-                             <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${entry.distance_km > 5 ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'}`}>
+                             <span className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${entry.distance_km > 5 ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'}`}>
                                 {entry.distance_km}km Transit
                              </span>
                           </div>
@@ -123,8 +123,8 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({ schedule }) => {
         ))}
 
         {filteredSchedule.length === 0 && (
-          <div className="text-center py-20 bg-white rounded-xl border border-slate-200 border-dashed">
-            <p className="text-slate-400 font-bold text-sm">No assignments match your search</p>
+          <div className="panel-surface rounded-[var(--radius-panel)] border border-dashed border-slate-200 py-20 text-center">
+            <p className="text-sm font-bold text-slate-400">No assignments match your search</p>
             <button 
               onClick={() => setSearchTerm('')}
               className="mt-4 text-xs font-bold text-indigo-600 hover:underline"

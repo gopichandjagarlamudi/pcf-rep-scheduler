@@ -1,0 +1,151 @@
+PCF Rep Scheduler - Scheduling Rules
+Source of truth: utils/scheduler.ts
+
+This document describes the scheduling rules currently enforced by the app.
+It is written for product and pitch discussions, but it reflects the real
+logic implemented in code today.
+
+1. Scheduling window and weekly logic
+
+- The scheduler works across a selected date range.
+- The selected range is split into Sunday-Saturday weeks.
+- Weekly targets and compliance are evaluated separately for each week.
+- If the selected date range starts or ends mid-week, only the days inside
+  the selected range are scheduled, but they are still judged inside the
+  Sunday-Saturday week structure.
+
+2. Eligibility rules for assigning a rep on a given day
+
+A rep is eligible for assignment on a day only if all of the following are true:
+
+- The rep status is "active".
+- The rep appears in the availability file for that date.
+- The rep is not listed in the time-off file for that date.
+
+Inactive reps are never scheduled.
+Reps without availability on a day are never scheduled on that day.
+Time-off entries always block scheduling for that day.
+
+3. Weekly hour targets
+
+- Full-time reps are targeted for 40-44 hours per week.
+- Part-time reps are targeted for 24 hours per week.
+- Compliance reporting flags active reps who finish below their weekly minimum.
+
+4. Shift length rules
+
+The scheduler currently uses two fixed shift templates:
+
+- 8-hour shift: 11:00 to 19:00
+- 6-hour shift: 13:00 to 19:00
+
+Full-time reps:
+- Prefer 8-hour shifts first.
+- Can receive a 6-hour shift only when an 8-hour shift would exceed the weekly max.
+- Cannot exceed 44 hours in a week.
+
+Part-time reps:
+- Cannot exceed 24 hours in a week.
+- Use one shift mode per week, chosen from their usable availability count:
+  - 4 or more available days in a week -> prefer 6-hour mode
+  - 3 or fewer available days in a week -> use 8-hour mode
+
+Important implementation note:
+- Availability start and end times from the uploaded file are not used to shape
+  the assigned shift window.
+- Availability is treated as day-level eligibility, not time-window matching.
+
+5. Assignment priority rules
+
+For each day, eligible reps are sorted before assignment.
+
+Priority order:
+- Reps furthest below their weekly target are scheduled first.
+- If two reps have the same deficit, the tie is broken by rep ID.
+
+This means the scheduler is designed to pull under-assigned reps upward before
+giving more hours to reps already near target.
+
+6. Location assignment rules
+
+When selecting a location for a rep, the scheduler applies these rules:
+
+- A rep cannot be assigned to the same location on consecutive scheduled days.
+- Each location normally accepts 1 rep per day.
+- If the number of eligible reps is greater than the number of locations for that day,
+  the scheduler enters overflow mode and allows up to 2 reps per location.
+
+7. Distance rules
+
+The scheduler calculates straight-line distance between each rep's home coordinates
+and each location's coordinates.
+
+Location preference order:
+- Prefer locations within 5 km of the rep's home.
+- Among local options, prefer an empty location first.
+- If no empty local location exists, use the nearest local location with capacity.
+- If no local option exists and the rep is still below weekly target, allow a location
+  beyond 5 km as a fallback.
+- Among distant options, prefer an empty location first, then the nearest distant one.
+
+This means distance is a preference rule first, but the system can relax it to help
+active reps reach minimum hours.
+
+8. Unassigned-day rule
+
+A rep becomes unassigned for a day when no location satisfies the combined constraints:
+
+- active status
+- availability present
+- no time off
+- rotation rule
+- location capacity rule
+- distance rule and fallback logic
+
+When this happens, the system records an unassigned-day entry for reporting.
+
+9. Overflow rule
+
+- If more than one rep is placed at the same location on the same day, the system records
+  that as an overflow condition.
+- Overflow is only possible when eligible reps outnumber locations and the scheduler raises
+  per-location capacity from 1 to 2.
+
+10. Compliance and reporting outputs
+
+After scheduling, the system produces these reporting metrics:
+
+- Total shifts generated
+- Per-rep total hours
+- Per-rep shift count
+- Unassigned days
+- Overflow days
+- Weekly hour-gap records for active reps below minimum target
+
+Hour-gap reporting rules:
+- Full-time rep below 40 hours in a week -> flagged
+- Part-time rep below 24 hours in a week -> flagged
+- Inactive reps are excluded from hour-gap compliance reporting
+
+11. Practical summary for a pitch meeting
+
+In plain language, the scheduler currently does this:
+
+- Schedules only active reps who are available and not on time off
+- Prioritizes reps who are furthest below weekly target hours
+- Uses fixed 6-hour and 8-hour shift templates
+- Follows different weekly target rules for full-time and part-time staff
+- Prevents back-to-back assignment to the same location
+- Prefers nearby locations first, then uses farther locations only when needed
+- Allows controlled overflow when there are more eligible reps than locations
+- Reports shortfalls, overflow, and unassigned situations transparently
+
+12. Important limitations to state honestly
+
+These are not bugs in this document. They are current product behaviors:
+
+- Availability times are not matched against assigned shift times; only the date is used.
+- Distance is based on coordinate distance, not live travel time.
+- Rotation only prevents repeating the immediately previous location, not broader rotation history.
+- The system does not use skill matching, seniority, store priority, or custom fairness weights.
+- The system does not dynamically create custom shift lengths beyond the fixed 6-hour and 8-hour templates.
